@@ -48,7 +48,12 @@
                         "copier": {
                             "module": "kraken-devtools/plugins/copier",
                             "files": "**/*"
-                        }
+                        },
+                        "jsx": {
+                            "module": "kraken-jsx-devtools",
+                            "files": "/js/**/*.js",
+                            "ext": "jsx"
+                        }                        
                     }
                 ]
             }

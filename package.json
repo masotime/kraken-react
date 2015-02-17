@@ -15,6 +15,7 @@
     "express": "^4.3.0",
     "kraken-devtools": "^1.0.0",
     "kraken-js": "^1.0.1",
+    "kraken-jsx-devtools": "0.0.2",
     "less": "^1.7.5",
     "localizr": "^0.1.5",
     "requirejs": "^2.1.16"
