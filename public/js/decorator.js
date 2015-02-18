@@ -9,28 +9,26 @@
         root.returnExports = factory();
     }
 })(this, function () {
-	return (function factory() {
-		return function decorator(model) {
+	return function decorator(model) {
 
-			// decorate only textfield for now
-			var textfield = model.textfield;
-			// console.log(action,path,e.target.value);
+		// decorate only textfield for now
+		var textfield = model.textfield;
+		// console.log(action,path,e.target.value);
 
-			textfield.errors = [];
-			textfield.hints = [];
+		textfield.errors = [];
+		textfield.hints = [];
 
-			if (textfield.processed) {
-				if (textfield.value.length === 0) {
-					textfield.errors.push('Please enter something');
-				} else if (textfield.value.match(/[0-9]+/)) {
-					textfield.errors.push('Field cannot have numbers');
-				}
+		if (textfield.processed) {
+			if (textfield.value.length === 0) {
+				textfield.errors.push('Please enter something');
+			} else if (textfield.value.match(/[0-9]+/)) {
+				textfield.errors.push('Field cannot have numbers');
 			}
+		}
 
-			textfield.hints.push('Use this field with alphabets only');
+		textfield.hints.push('Use this field with alphabets only');
 
-			return model;
+		return model;
 
-		};
-	}());
+	};
 });

@@ -12,7 +12,15 @@
             "renderer": {
                 "method": "js",
                 "arguments": [
-                    { "cache": true },
+                    { 
+                        "cache": true,
+                        "helpers": [ 
+                            { 
+                                "name": "dust-react", 
+                                "arguments": { "relativePath": "public/js/react" } 
+                            }
+                        ]
+                    },
                     {
                         "views": "config:express.views",
                         "view engine": "config:express.view engine",

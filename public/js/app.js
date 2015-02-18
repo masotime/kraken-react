@@ -43,6 +43,9 @@ require(['react', 'textfield', 'header', 'model', 'decorator'], function (React,
 			var initialState = ReactModel;
 
 			initialState.textfield.trigger = controller; // bind the controller once
+
+			// test: alter the model
+			// initialState.textfield.value = 'Guava';
 			React.render(React.createFactory(Textfield)(initialState.textfield), document.getElementById('textfield'));
         }
     };

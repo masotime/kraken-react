@@ -3,6 +3,7 @@
 {<body}
     <div id="react-container">
     	<div id="header"></div>
-    	<div id="textfield"></div>
+    	{!<div id="textfield"></div>!}
+    	{@react component="textfield" componentId="textfield" props=reactModel.textfield /}
     </div>
 {/body}
