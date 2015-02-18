@@ -1,0 +1,40 @@
+.react-textfield {
+
+	display: inline-block;
+
+	.hints {
+		display: none;
+		background-color: lightblue;
+		border: 1px solid blue;
+
+	}
+
+	.errors {
+		display: none;
+		background-color: pink;
+		border: 1px solid red;
+	}
+
+	&.focused {
+		.hints {
+			display: block;
+		}
+
+		.errors {
+			display: block;
+		}		
+	}
+
+	&.invalid {
+
+		input[type="text"] {
+			border: 1px solid #F00;	
+		}
+
+		.hints {
+			display: none;
+		}
+
+	}
+
+}

@@ -16,54 +16,62 @@
 		},
 		getDefaultProps: function () {
 			return {
+				processed: false,
+				content: {
+					label: '',
+					placeholder: ''
+				},
 				value: '',
-				label: '',
-				placeholder: ''
+				errors: [],
+				hints: []
 			};
 		},
 		onFocus: function () {
-			this.setState({ focus: true });
+			this.setState({ hasFocus: true });
 		},
 		onBlur: function() {
-			this.setState({ focus: false });
+			this.setState({ hasFocus: false });
 		},
 		render: function() {
 			var props = this.props,
+				content = props.content,
 				state = this.state,
 				mixins = {
 					trigger: this.trigger
 				};
 
 			var classes = React.addons.classSet({
-				focused: state.hasFocus
+				'react-textfield': true,
+				focused: state.hasFocus,
+				invalid: props.errors.length > 0
 			});
 
 			return (<div className={classes}>
-				<label>{props.label}</label>
-				<input type="text" onFocus={this.onFocus} onBlur={this.onBlur} onChange={mixins.trigger('UPDATE')} value={props.value} placeholder={props.placeholder} />
-				<button type="button">&times;</button>
-				<div className="hints">			
+				<label>{content.label}</label>
+				<input type="text" onFocus={this.onFocus} onBlur={this.onBlur} onChange={mixins.trigger('UPDATE')} value={props.value} placeholder={content.placeholder} />
+				<button type="button" onClick={mixins.trigger('CLEAR')}>&times;</button>
 				{ 
-					Array.isArray(props.hints) && props.hints.length > 0 ? (<ul>
-						{
-							props.hints.map(function renderHint(hint) {
-								return <li>{hint}</li>;
-							})
-						}
-					</ul>) : null
+					Array.isArray(props.hints) && props.hints.length > 0 ? (<div className="hints">
+							<ul>
+							{
+								props.hints.map(function renderHint(hint) {
+									return <li>{hint}</li>;
+								})
+							}
+							</ul>
+						</div>) : null
 				}
-				</div>
-				<div className="errors">
 				{ 
-					Array.isArray(props.errors) && props.errors.length > 0 ? (<ul>
-						{
-							props.errors.map(function renderError(error) {
-								return <li>{error}</li>
-							}) 
-						}
-					</ul>) : null
-				}			
-				</div>
+					Array.isArray(props.errors) && props.errors.length > 0 ? (<div className="errors">
+							<ul>
+							{
+								props.errors.map(function renderError(error) {
+									return <li>{error}</li>
+								}) 
+							}
+						</ul>
+					</div>) : null
+				}
 			</div>);
 		}
 	});

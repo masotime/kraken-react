@@ -1,20 +1,27 @@
 'use strict';
 
-
-var IndexModel = require('../models/index');
-
+var decorate = require('../public/js/decorator');
 
 module.exports = function (router) {
 
-    var model = new IndexModel();
-
-
     router.get('/', function (req, res) {
-        
+
+        var reactModel = {
+            textfield: {
+                processed: false,
+                content: {
+                    label: 'Name',
+                    placeholder: 'e.g. Benjamin'
+                },
+                value: ''
+            }
+        };
+
+        var model = {
+            reactModel: decorate(reactModel)
+        };
         
         res.render('index', model);
-        
-        
     });
 
 };
