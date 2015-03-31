@@ -1,3 +1,11 @@
+// The following props are accepted:
+// * type (password or text)
+// * className
+// * value
+// * content.label, content.placeholder, content.errors[] and content.hints[],
+// * validated (boolean)
+// * showInfo (boolean)
+
 define(['react', 'OnMountMixin', 'TriggerMixin'], function(React, OnMountMixin, TriggerMixin) {
     'use strict';
 
@@ -8,7 +16,7 @@ define(['react', 'OnMountMixin', 'TriggerMixin'], function(React, OnMountMixin, 
     }
 
     var TextField = React.createClass({
-        mixins: [OnMountMixin],
+        mixins: [OnMountMixin, TriggerMixin],
         getInitialState: function () {
             return {
                 hasFocus: false,
@@ -19,10 +27,14 @@ define(['react', 'OnMountMixin', 'TriggerMixin'], function(React, OnMountMixin, 
             return {
                 type: 'text',
                 className: 'inputField',
-                errors: [],
-                hints: [],
                 value: '',
-                processed: false,
+                content: {
+                    label: 'label',
+                    placeholder: 'placeholder',
+                    errors: [],
+                    hints: []
+                },
+                validated: false, // show errors (e.g. after blur)
                 showInfo: true // shows hints or errors
             };
         },
@@ -30,58 +42,56 @@ define(['react', 'OnMountMixin', 'TriggerMixin'], function(React, OnMountMixin, 
             this.setState({ hasFocus: false });
             propagateEvent(this.props, 'onBlur', e);
         },
-        onFocus: function () {
+        onFocus: function (e) {
             this.setState({ hasFocus: true });
             propagateEvent(this.props, 'onFocus', e);
         },
-        onChange: function () {
+        onChange: function (e) {
             var props = this.props,
-                node = this.refs.value.getDOMNode();
-            this.setState({ hasText: (node.value.length > 0) });
-            propagateEvent(props, 'onChange', node.value);
-            onChange && onChange(node.value);
+                mixin = {
+                    trigger: this.trigger
+                };
+            this.setState({ hasText: (e.target.value.length > 0) });
+            propagateEvent(props, 'onChange', e); // note how this is different, I pass in the value instead of the event.
+            mixin.trigger('UPDATE')(e.target.value); // programmatic trigger
         },
         render: function () {
             var props = this.props,
-                state = this.state;
+                state = this.state,
+                content = props.content || {},
+                mixin = {
+                    trigger: this.trigger
+                };
 
-            var className = this.props.className || 'inputField';
-            var showHints = props.hints.length > 0 && props.showInfo;
-            var showErrors = props.errors.length > 0 && props.processed && props.showInfo;
+            // some defensive coding
+            content.errors = content.errors || [];
+            content.hints = content.hints || [];
 
-            if (showErrors) {
-                className += ' has-error';
-            }
-
-            if (state.hasFocus) {
-                if (showErrors) {
-                    containerClass = 'errors';
-                    itemClass = 'error-item';
-                    infoArray = props.errors;
-                } else if (showHints) {
-                    containerClass = 'hints';
-                    itemClass='hint-item';
-                    infoArray = props.hints;
-                }
-            }
+            var showHints = content.hints.length > 0 && props.showInfo,
+                showErrors = content.errors.length > 0 && props.validated && props.showInfo,
+                infoBox = {
+                    visible: state.hasFocus && (showHints || showErrors),
+                    className: showErrors ? 'errors' : 'hints',
+                    items: showErrors ? content.errors : content.hints
+                };
 
             return (
-                <div className={className}>
+                <div className={props.className}>
                     <label htmlFor={props.id || props.name}>{props.label || props.name}</label>
                     <div className="textfield">                    
                         <input ref="value"
                             type={ props.type === 'password' ? 'password' : 'text' } 
                             id={props.id} 
                             name={props.name} 
-                            placeholder={props.placeholder || props.label} 
+                            placeholder={content.placeholder || content.label} 
                             onBlur={this.onBlur} 
                             onFocus={this.onFocus}
                             onChange={this.onChange}
                             onKeyUp={this.onKeyUp}
                             disabled={props.disabled}
-                            value={state.value} />
-                        { state.hasText ? <FieldWidget className="clear-input" label="&times;" onClick={this.reset} /> : null }
-                        { state.hasFocus ? <FieldInfo containerClass={containerClass} itemClass={itemClass} infoArray={infoArray} /> : null }
+                            value={props.value} />
+                        { state.hasText ? <button tabIndex="-1" className="clear-input" onClick={mixin.trigger('CLEAR')}>&times;</button> : null }
+                        { infoBox.visible ? <FieldInfo ckassName={infoBox.className} items={infoBox.items} /> : null }
                     </div>
                 </div>
             );
@@ -91,54 +101,23 @@ define(['react', 'OnMountMixin', 'TriggerMixin'], function(React, OnMountMixin, 
     var FieldInfo = React.createClass({
         getDefaultProps: function () {
             return {
-                containerClass: 'info',
-                itemClass: 'info-item',
-                infoArray: []
+                className: 'info',
+                items: []
             };
         },
         render: function () {
-            var self = this;
-            var infoArray = self.props.infoArray;
-            var items = infoArray.map(function(info) {
-                return <li className={self.props.itemClass} dangerouslySetInnerHTML={{__html: info}}></li>;
-            });
+            var props = this.props, itemEl;
 
-            if (items.length === 0) {
-                return null;
-            } else if (items.length === 1) {
-                return (
-                    <div className={this.props.containerClass}>
-                        <span className={self.props.itemClass} dangerouslySetInnerHTML={{__html: infoArray[0]}}></span>
-                    </div>
-                );
+            if (props.items.length === 0) {
+                itemEl = <span className="item" dangerouslySetInnerHTML={{__html: props.items[0]}}></span>;
             } else {
-                return (
-                    <div className={this.props.containerClass}>
-                        <ul>
-                            {items}
-                        </ul>
-                    </div>
-                );
+                itemEl = 
+                    <ul> { 
+                        props.items.map( function(item, index) { return <li index={index} className="item" dangerouslySetInnerHTML={{__html: item}}></li>; } )
+                    } </ul>;
             }
-        }
-    });
 
-    var FieldWidget = React.createClass({
-        getDefaultProps: function () {
-            return {
-                className: '',
-                label: ''
-            };
-        },
-        onClick: function (e) {
-            e.preventDefault();
-            if (this.props.onClick) {
-                this.props.onClick();
-            }
-        }, render: function () {
-            return (
-                <button tabIndex="-1" className={this.props.className} onClick={this.onClick}>{this.props.label}</button>
-            );
+            return <div className={props.className}> { itemEl } </div>;
         }
     });
 
