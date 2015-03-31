@@ -54,8 +54,8 @@
 					Array.isArray(props.hints) && props.hints.length > 0 ? (<div className="hints">
 							<ul>
 							{
-								props.hints.map(function renderHint(hint) {
-									return <li>{hint}</li>;
+								props.hints.map(function renderHint(hint, idx) {
+									return <li key={idx}>{hint}</li>;
 								})
 							}
 							</ul>
@@ -65,8 +65,8 @@
 					Array.isArray(props.errors) && props.errors.length > 0 ? (<div className="errors">
 							<ul>
 							{
-								props.errors.map(function renderError(error) {
-									return <li>{error}</li>
+								props.errors.map(function renderError(error, idx) {
+									return <li key={idx}>{error}</li>
 								}) 
 							}
 						</ul>
