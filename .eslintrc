@@ -4,6 +4,7 @@
 	},
 	"rules": {
 		"quotes": [2, "single"],
-		"eol-last": 0
+		"eol-last": 0,
+		"no-shadow": 0
 	}
 }

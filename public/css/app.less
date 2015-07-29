@@ -1,32 +1,71 @@
+* {
+	box-sizing: border-box;
+}
+
+body {
+	font-family: Charter;
+	font-size: 16px;
+	margin: 0;
+	padding: 1em 5.5% 0;
+}
+
+input, button {
+	font-family: 'Helvetica Neue', sans-serif;
+	font-size: 14px;
+	letter-spacing: 0.3px;
+	padding: 0.5em;
+}
+
+label {
+	display: inline-block;
+	margin-right: 1em;
+}
+
 .react-textfield {
 
 	display: inline-block;
 
-	.hints {
+	input {
+		border: 1px solid #CCC;
+		border-radius: 0.5em;
+		padding-right: 2em;
+	}
+
+	.hints, .errors {
 		display: none;
+		font-family: 'Helvetica Neue';
+
+		ul {
+			margin: 0;
+			padding: 0.25em 0 0.25em 2em;
+			font-size: 0.8em;
+		}
+	}
+
+	.hints {
 		background-color: lightblue;
 		border: 1px solid blue;
-
 	}
 
 	.errors {
-		display: none;
 		background-color: pink;
 		border: 1px solid red;
 	}
 
+	button {
+	    border: none;
+	    position: relative;
+	    left: -2em;
+	    background-color: transparent;
+	}
+
 	&.focused {
-		.hints {
+		.hints, .errors {
 			display: block;
 		}
-
-		.errors {
-			display: block;
-		}		
 	}
 
 	&.invalid {
-
 		input[type="text"] {
 			border: 1px solid #F00;	
 		}
