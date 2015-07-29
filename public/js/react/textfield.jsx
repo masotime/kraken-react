@@ -1,11 +1,11 @@
 (function (root, factory) {
 	'use strict';
     if (typeof define === 'function' && define.amd) {
-        define(['react', 'trigger'], factory);
+        define(['react', 'trigger', 'classnames'], factory);
     } else if (typeof exports === 'object') {
-        module.exports = factory(require('react/addons'), require('./mixins/trigger'));
+        module.exports = factory(require('react/addons'), require('./mixins/trigger'), require('classnames'));
     }
-})(this, function (React, TriggerMixin) {
+})(this, function (React, TriggerMixin, classnames) {
 	'use strict';
 	return React.createClass({
 		mixins: [TriggerMixin],
@@ -40,7 +40,7 @@
 					trigger: this.trigger
 				};
 
-			var classes = React.addons.classSet({
+			var classes = classnames({
 				'react-textfield': true,
 				focused: state.hasFocus,
 				invalid: props.errors.length > 0
@@ -50,7 +50,7 @@
 				<label>{content.label}</label>
 				<input type="text" onFocus={this.onFocus} onBlur={this.onBlur} onChange={mixins.trigger('UPDATE')} value={props.value} placeholder={content.placeholder} />
 				<button type="button" onClick={mixins.trigger('CLEAR')}>&times;</button>
-				{ 
+				{
 					Array.isArray(props.hints) && props.hints.length > 0 ? (<div className="hints">
 							<ul>
 							{
@@ -61,13 +61,13 @@
 							</ul>
 						</div>) : null
 				}
-				{ 
+				{
 					Array.isArray(props.errors) && props.errors.length > 0 ? (<div className="errors">
 							<ul>
 							{
 								props.errors.map(function renderError(error, idx) {
-									return <li key={idx}>{error}</li>
-								}) 
+									return <li key={idx}>{error}</li>;
+								})
 							}
 						</ul>
 					</div>) : null

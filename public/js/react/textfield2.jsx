@@ -1,6 +1,6 @@
 // The following props are accepted:
-// * type (password or text)
-// * className
+// * [OPTIONAL] type (password or text)
+// * [OPTIONAL] className
 // * value
 // * content.label, content.placeholder, content.errors[] and content.hints[],
 // * validated (boolean)
