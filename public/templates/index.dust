@@ -4,6 +4,7 @@
 {<body}
     <div id="react-container">
     	<h1>{title}</h1>
+    	<h3>Can Dust and React co-operate?</h3>
     	{!<div id="textfield"></div>!}
     	{@react component="textfield" componentId="textfield" props=reactModel.textfield /}
     	{!@react component="textfield2" componentId="textfield2" props=reactModel.textfield2 /!}
