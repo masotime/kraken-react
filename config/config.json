@@ -8,7 +8,7 @@
 
     "view engines": {
         "js": {
-            "module": "engine-munger",
+            "module": "makara",
             "renderer": {
                 "method": "js",
                 "arguments": [
@@ -17,15 +17,9 @@
                         "helpers": [ 
                             { 
                                 "name": "dust-react", 
-                                "arguments": { "relativePath": "public/js/react" } 
+                                "arguments": [ { "relativePath": "public/js/react" } ]
                             }
                         ]
-                    },
-                    {
-                        "views": "config:express.views",
-                        "view engine": "config:express.view engine",
-                        "specialization": "config:specialization",
-                        "i18n": "config:i18n"
                     }
                 ]
             }
@@ -59,7 +53,12 @@
             "priority": 100,
             "enabled": true,
             "module": {
-                "name": "engine-munger/lib/expressView"
+                "name": "makara",
+                "arguments": [
+                    {
+                        "i18n": "config:i18n"
+                    }
+                ]
             }
         }
         

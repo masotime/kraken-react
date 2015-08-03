@@ -1,5 +1,5 @@
 {
-    
+
     "express": {
         "view cache": false,
         "view engine": "dust",
@@ -8,16 +8,18 @@
 
     "view engines": {
         "dust": {
-            "module": "engine-munger",
+            "module": "makara",
             "renderer": {
                 "method": "dust",
                 "arguments": [
-                    { "cache": false },
                     {
-                        "views": "config:express.views",
-                        "view engine": "config:express.view engine",
-                        "specialization": "config:specialization",
-                        "i18n": "config:i18n"
+                        "cache": true,
+                        "helpers": [
+                            {
+                                "name": "dust-react",
+                                "arguments": [ { "relativePath": "public/js/react" } ]
+                            }
+                        ]
                     }
                 ]
             }
@@ -34,7 +36,7 @@
                 "arguments": [
                     "path:./public",
                     "path:./.build",
-                    {   
+                    {
                         "template": {
                             "module": "kraken-devtools/plugins/dustjs",
                             "files": "/templates/**/*.js",
@@ -53,7 +55,7 @@
                             "module": "kraken-jsx-devtools",
                             "files": "/js/**/*.js",
                             "ext": "jsx"
-                        }                        
+                        }
                     }
                 ]
             }
